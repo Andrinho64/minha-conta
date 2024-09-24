@@ -33,7 +33,13 @@ public class EnergyBill {
    * Req. 3 – Calculates the total usage of a collection of devices.
    */
   public static int calculateTotalUsage(ElectronicDevice[] devices) {
-    return 0;
+    int totalMonthlyKwh = 0;
+
+    for (ElectronicDevice device : devices) {
+      totalMonthlyKwh += device.monthlyKwh();
+    }
+
+    return totalMonthlyKwh;
   }
 
   /**
