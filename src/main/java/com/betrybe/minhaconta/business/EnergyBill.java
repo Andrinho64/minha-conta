@@ -22,7 +22,11 @@ public class EnergyBill {
    */
 
   public double adjustedTariff(double value) {
-    return 0d;
+    if (!residentialPlan) {
+      return value * 1.1;
+    }
+
+    return value;
   }
 
   /**
