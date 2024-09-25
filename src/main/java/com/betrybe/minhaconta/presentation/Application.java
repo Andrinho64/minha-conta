@@ -116,6 +116,30 @@ public class Application {
    * Req. 8 – Register address devices.
    */
   public void registerAddressDevices() {
+    try {
+      String registration = ui.inputAddressRegistration();
+      Address address = api.findAddress(registration);
+      if (address == null) {
+        ui.showMessage("Endereço não encontrado!");
+        return;
+      }
+
+      int numberOfDevices = ui.inputNumberOfDevices();
+      for (int i = 0; i < numberOfDevices; i++) {
+        ElectronicDevice device = new ElectronicDevice();
+        
+        ui.fillDeviceData(device);
+        
+        api.addDeviceToAddress(device, address);
+      }
+
+      ui.showMessage("Dispositivos cadastrados com sucesso!");
+
+    } catch (NumberFormatException e) {
+      ui.showMessage("Erro: Formato inválido ao inserir um número.");
+    } catch (Exception e) {
+      ui.showMessage("Erro inesperado: " + e.getMessage());
+    }
   }
 
   /**
