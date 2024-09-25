@@ -2,6 +2,7 @@ package com.betrybe.minhaconta.presentation;
 
 import com.betrybe.minhaconta.business.EnergyAccount;
 import com.betrybe.minhaconta.presentation.ConsoleUserInterface;
+import com.ions.lightdealer.sdk.model.Address;
 import com.ions.lightdealer.sdk.model.Client;
 import com.ions.lightdealer.sdk.model.ElectronicDevice;
 import com.ions.lightdealer.sdk.service.LightDealerApi;
@@ -90,7 +91,26 @@ public class Application {
    * Req. 7 – Register client address.
    */
   public void registerClientAddress() {
+    try {
+      String cpf = ui.inputClientCpf();
+      Client client = api.findClient(cpf);
+      if (client == null) {
+        ui.showMessage("Pessoa cliente não encontrada!");
+        return;
+      }
+
+      Address address = new Address();        
+      ui.fillAddressData(address);
+      api.addAddressToClient(address, client);
+      ui.showMessage("Endereço cadastrado com sucesso!");
+
+    } catch (NumberFormatException e) {
+      ui.showMessage("Erro: Formato inválido ao inserir um número.");
+    } catch (Exception e) {
+      ui.showMessage("Erro inesperado: " + e.getMessage());
+    }
   }
+
 
   /**
    * Req. 8 – Register address devices.
