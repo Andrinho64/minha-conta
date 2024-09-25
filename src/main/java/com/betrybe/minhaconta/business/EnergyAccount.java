@@ -24,17 +24,23 @@ public class EnergyAccount {
     ElectronicDevice[] highConsumptionDevices = new ElectronicDevice[addresses.length];
 
     for (int i = 0; i < addresses.length; i++) {
-      ElectronicDevice[] devices = addresses[i].getDevicesAsArray();
-      ElectronicDevice highConsumptionDevice = devices[0];
+      Address address = addresses[i];
+      ElectronicDevice[] devices = address.getDevicesAsArray();
 
-      for (ElectronicDevice device : devices) {
-        if (device.monthlyKwh() > highConsumptionDevice.monthlyKwh()) {
-          highConsumptionDevice = device;
-        }
+      if (devices == null || devices.length == 0) {
+        highConsumptionDevices[i] = null;
+        continue;
       }
 
-      highConsumptionDevices[i] = highConsumptionDevice;
+      ElectronicDevice maxDevice = devices[0];
+      for (ElectronicDevice device : devices) {
+        if (device.monthlyKwh() > maxDevice.monthlyKwh()) {
+          maxDevice = device;
+        }
+      }
+      highConsumptionDevices[i] = maxDevice;
     }
-    return new ElectronicDevice[0];
+
+    return highConsumptionDevices;
   }
 }
