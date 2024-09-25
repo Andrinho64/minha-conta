@@ -168,11 +168,37 @@ public class Application {
    * Req. 10 – Optimizes the energy bill.
    */
   public void optimizeEnergyBill() {
+    try {
+      String cpf = ui.inputClientCpf();
+      Client client = api.findClient(cpf);
+      if (client == null) {
+        ui.showMessage("Pessoa cliente não encontrada!");
+        return;
+      }
+
+      EnergyAccount energyAccount = new EnergyAccount(client);
+
+      suggestReducedUsage(energyAccount);
+
+    } catch (Exception e) {
+      ui.showMessage("Erro inesperado: " + e.getMessage());
+    }
   }
 
   /**
    * Req 10 - Aux. Method to display high consumptions devices.
    */
   public void suggestReducedUsage(EnergyAccount energyAccount) {
+    try {
+      ElectronicDevice[] highConsumptionDevices = energyAccount.findHighConsumptionDevices();
+      
+      ui.showMessage("Considere reduzir o uso dos seguintes dispositivos:");
+      
+      for (ElectronicDevice device : highConsumptionDevices) {
+        ui.showMessage(device.getName());
+      }
+    } catch (Exception e) {
+      ui.showMessage("Erro inesperado ao sugerir redução de uso: " + e.getMessage());
+    }
   }
 }
